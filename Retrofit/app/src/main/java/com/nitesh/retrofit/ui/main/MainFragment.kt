@@ -33,11 +33,14 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
         viewModel.getPost()
         viewModel.myresponse.observe(viewLifecycleOwner, Observer { response ->
-            Log.d("Response",response.userId.toString())
-            Log.d("Response",response.id.toString())
-            Log.d("Response",response.title.toString())
-            Log.d("Response",response.body.toString())
-
+            if(response.isSuccessful) {
+                Log.d("Response", response.body()?.userId.toString())
+                Log.d("Response", response.body()?.id.toString())
+                response.body()?.title?.let { Log.d("Response", it) }
+                response.body()?.body?.let { Log.d("Response", it) }
+            }else{
+                Log.e("Response",response.errorBody().toString())
+            }
         })
     }
 

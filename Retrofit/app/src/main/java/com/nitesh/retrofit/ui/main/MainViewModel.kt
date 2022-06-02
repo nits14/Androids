@@ -6,10 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.nitesh.retrofit.model.Post
 import com.nitesh.retrofit.repository.Repository
 import kotlinx.coroutines.launch
+import retrofit2.Response
 
 class MainViewModel(private val repository: Repository) : ViewModel() {
 
-    val myresponse : MutableLiveData<Post> = MutableLiveData()
+    val myresponse : MutableLiveData<Response<Post>> = MutableLiveData()
     fun getPost(){
         viewModelScope.launch {
             val reposnse = repository.getPost()

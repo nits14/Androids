@@ -35,22 +35,30 @@ class MainFragment : Fragment() {
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
-       // viewModel.getPost()
+
+        val options : HashMap<String,String> = HashMap()
+        options["_sort"] = "id"
+        options["_order"] = "desc"
 
 
         binding.button.setOnClickListener(){
             val number = binding.editTextNumber.text.toString()
-            viewModel.getPost2(Integer.parseInt(number))
+            viewModel.getCustomPost2(Integer.parseInt(number),options)
 
-            viewModel.myresponse2.observe(viewLifecycleOwner, Observer { response ->
+            viewModel.myCustomPostResponse2.observe(viewLifecycleOwner, Observer { response ->
                 if(response.isSuccessful) {
-                    Log.d("Response",response.body()?.userId.toString())
-                    Log.d("Response",response.body()?.id.toString())
-                    Log.d("Response",response.body()?.title.toString())
-                    Log.d("Response",response.body()?.body.toString())
+                    response.body()?.forEach{
+                        Log.d("Response",it.userId.toString())
+                        Log.d("Response",it.id.toString())
+                        Log.d("Response", it.title)
+                        Log.d("Response", it.body)
+                        Log.d("Response", "-----------")
+                    }
+
                     binding.message.text = response.body().toString()
                 }else{
-                    Log.e("Response",response.errorBody().toString())
+                    //Log.e("Response",response.errorBody().toString())
+                    binding.message.text = response.code().toString()
                 }
             })
         }
